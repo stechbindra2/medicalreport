@@ -1,0 +1,52 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment configuration
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Uploads and temporary files
+uploads/*
+!uploads/.gitkeep
+tmp/
+temp/
+
+# Test files
+test-medical-report.txt
+test-*.txt
+test-*.pdf
+test-*.docx
+test-*.xlsx
+test-*.csv
+
+# Coverage and test reports
+coverage/
+.nyc_output/
+
+# Editor and IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+out/
+
+# Generated files
+.vercel
+.next
+*.bak

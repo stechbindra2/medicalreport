@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediSummarize - Medical Report Processor</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="description" content="Securely process medical reports with PII masking and AI-generated summaries">
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <div class="logo">
+        <i class="fas fa-heartbeat logo-icon"></i>
+        <span class="logo-text">MediSummarize</span>
+      </div>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="#" class="active">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#security">Security</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Medical Report Processing with Enhanced Privacy</h1>
+        <p class="hero-text">
+          Securely analyze medical reports with PII masking, encryption, and AI-powered summaries.
+          Designed for healthcare professionals who value patient privacy and efficiency.
+        </p>
+      </div>
+    </section>
+
+    <section class="report-processor">
+      <div class="container">
+        <div class="card">
+          <div class="card-header">
+            <h2>Process Medical Report</h2>
+            <p>Enter text or upload a file to process it securely</p>
+          </div>
+          
+          <div class="input-tabs">
+            <button class="input-tab-btn active" data-input="text">Text Input</button>
+            <button class="input-tab-btn" data-input="file">File Upload</button>
+            <button class="input-tab-btn" data-input="image">Image Analysis</button>
+          </div>
+          
+          <div class="card-body">
+            <!-- Text input section -->
+            <div id="textInputSection" class="input-section active">
+              <div class="form-group">
+                <label for="medicalReport">Medical Report Text</label>
+                <textarea id="medicalReport" rows="10" placeholder="Enter medical report text here..."></textarea>
+                <div class="actions">
+                  <button id="pasteExample" class="btn btn-secondary">
+                    <i class="fas fa-clipboard"></i> Paste Example
+                  </button>
+                  <button id="clearReport" class="btn btn-outline">
+                    <i class="fas fa-times"></i> Clear
+                  </button>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button id="processReport" class="btn btn-primary">
+                  <i class="fas fa-cogs"></i> Process Report
+                </button>
+              </div>
+            </div>
+            
+            <!-- File upload section - Fix the ID here -->
+            <div id="fileInputSection" class="input-section">
+              <div class="form-group">
+                <label for="reportFile">Upload Medical Report File</label>
+                <div class="file-upload-container">
+                  <div class="file-upload-area" id="dropArea">
+                    <i class="fas fa-file-upload upload-icon"></i>
+                    <p>Drag & drop your file here or click to browse</p>
+                    <p class="file-types">Supported formats: PDF, DOCX, XLSX, CSV, TXT</p>
+                    <input type="file" id="reportFile" class="file-input" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt">
+                  </div>
+                  <div id="fileInfo" class="file-info hidden">
+                    <div class="selected-file">
+                      <i class="fas fa-file-medical file-icon"></i>
+                      <span id="fileName">No file selected</span>
+                    </div>
+                    <button id="removeFile" class="btn btn-outline btn-sm">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button id="processFile" class="btn btn-primary" disabled>
+                  <i class="fas fa-cogs"></i> Process File
+                </button>
+              </div>
+            </div>
+
+            <div id="imageInputSection" class="input-section">
+              <div class="form-group">
+                <label for="imageFile">Upload Medical Image</label>
+                <div class="file-upload-container">
+                  <div class="file-upload-area" id="imageDropArea">
+                    <i class="fas fa-file-medical-alt upload-icon"></i>
+                    <p>Drag & drop your medical image or click to browse</p>
+                    <p class="file-types">Supported formats: JPEG, PNG, GIF, DICOM</p>
+                    <input type="file" id="imageFile" class="file-input" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff,.dicom,.dcm">
+                  </div>
+                  <div id="imagePreviewContainer" class="image-preview-container hidden">
+                    <img id="imagePreview" class="image-preview" src="" alt="Image preview">
+                    <button id="removeImage" class="btn btn-outline btn-sm">
+                      <i class="fas fa-times"></i> Remove
+                    </button>
+                  </div>
+                </div>
+                <div class="form-group mt-3">
+                  <label for="analysisPrompt">Analysis Instructions (Optional)</label>
+                  <textarea id="analysisPrompt" rows="3" placeholder="Enter specific instructions for image analysis..."></textarea>
+                  <p class="helper-text">Leave blank for general analysis or specify what to focus on.</p>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button id="processImage" class="btn btn-primary" disabled>
+                  <i class="fas fa-microscope"></i> Analyze Image
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div id="loadingIndicator" class="loading-container hidden">
+            <div class="spinner"></div>
+            <p>Processing your report securely...</p>
+          </div>
+          
+          <div id="resultContainer" class="result-container hidden">
+            <div class="tab-container">
+              <div class="tabs">
+                <button class="tab-btn active" data-tab="summary">AI Summary</button>
+                <button class="tab-btn" data-tab="masked">Masked Report</button>
+                <button class="tab-btn image-tab hidden" data-tab="image-analysis">Image Analysis</button>
+              </div>
+              
+              <div class="tab-content">
+                <div id="summary" class="tab-pane active">
+                  <h3>AI-Generated Summary</h3>
+                  <div id="summaryText" class="result-text"></div>
+                </div>
+                
+                <div id="masked" class="tab-pane">
+                  <h3>PII-Masked Report</h3>
+                  <p class="info-text">All personally identifiable information (PII) has been masked for privacy</p>
+                  <div id="maskedText" class="result-text code-block"></div>
+                </div>
+
+                <div id="image-analysis" class="tab-pane">
+                  <div class="image-analysis-container">
+                    <div class="image-analysis-image">
+                      <h3>Analyzed Image</h3>
+                      <img id="analysisImage" class="analyzed-image" src="" alt="Analyzed medical image">
+                    </div>
+                    <div class="image-analysis-result">
+                      <h3>AI Analysis Results</h3>
+                      <div id="imageAnalysisText" class="result-text"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="result-actions">
+              <div class="download-options">
+                <button id="toggleFormatMenu" class="btn btn-secondary">
+                  <i class="fas fa-download"></i> Download As
+                </button>
+                <div id="formatMenu" class="format-menu hidden" style="z-index:10000;">
+                  <button data-format="pdf" class="format-option"><i class="fas fa-file-pdf"></i> PDF</button>
+                  <button data-format="docx" class="format-option"><i class="fas fa-file-word"></i> Word</button>
+                  <button data-format="xlsx" class="format-option"><i class="fas fa-file-excel"></i> Excel</button>
+                  <button data-format="csv" class="format-option"><i class="fas fa-file-csv"></i> CSV</button>
+                  <button data-format="html" class="format-option"><i class="fas fa-file-code"></i> HTML</button>
+                  <button data-format="txt" class="format-option"><i class="fas fa-file-alt"></i> Text</button>
+                </div>
+              </div>
+              <button id="copyResult" class="btn btn-outline">
+                <i class="fas fa-copy"></i> Copy
+              </button>
+              <button id="newReport" class="btn btn-primary">
+                <i class="fas fa-plus"></i> New Report
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section id="features" class="features">
+      <div class="container">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>PII Masking</h3>
+            <p>Automatically detect and mask personally identifiable information before processing</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI Summaries</h3>
+            <p>Generate concise, structured summaries focusing on diagnosis and treatment</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-lock"></i>
+            </div>
+            <h3>Secure Encryption</h3>
+            <p>End-to-end encryption ensures sensitive medical data remains protected</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">
+              <i class="fas fa-compliance"></i>
+            </div>
+            <h3>GDPR Compliant</h3>
+            <p>Designed to meet strict healthcare privacy regulations and requirements</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section id="supported-files" class="supported-files">
+      <div class="container">
+        <h2>Supported File Types</h2>
+        <div class="file-types-grid">
+          <div class="file-type-item">
+            <i class="fas fa-file-pdf file-icon pdf"></i>
+            <h3>PDF Documents</h3>
+            <p>Extract and analyze text from PDF medical reports and records</p>
+          </div>
+          
+          <div class="file-type-item">
+            <i class="fas fa-file-word file-icon word"></i>
+            <h3>Word Documents</h3>
+            <p>Process DOCX files containing patient information and diagnoses</p>
+          </div>
+          
+          <div class="file-type-item">
+            <i class="fas fa-file-excel file-icon excel"></i>
+            <h3>Excel Spreadsheets</h3>
+            <p>Analyze tabular medical data from Excel and CSV files</p>
+          </div>
+          
+          <div class="file-type-item">
+            <i class="fas fa-file-alt file-icon text"></i>
+            <h3>Plain Text Files</h3>
+            <p>Process simple TXT and other plain text format medical reports</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section id="security" class="security-section">
+      <div class="container">
+        <div class="security-content">
+          <h2>Security By Design</h2>
+          <ul class="security-list">
+            <li><i class="fas fa-check-circle"></i> PII detection and masking before any external processing</li>
+            <li><i class="fas fa-check-circle"></i> AES-256-GCM encryption for sensitive data</li>
+            <li><i class="fas fa-check-circle"></i> No data retention after processing</li>
+            <li><i class="fas fa-check-circle"></i> Designed for healthcare compliance requirements</li>
+          </ul>
+        </div>
+        <div class="security-image">
+          <img src="assets/security-illustration.svg" alt="Security illustration">
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="app-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-heartbeat"></i>
+          <span>MediSummarize</span>
+        </div>
+        <p>© 2023 MediSummarize. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
