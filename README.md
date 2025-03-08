@@ -1,4 +1,5 @@
 # Medical Report Processor
+![screencapture-localhost-3002-2025-03-08-15_13_18](https://github.com/user-attachments/assets/23ad3df9-d721-4a9d-93c1-8d34439bc498)
 
 A secure system for processing medical reports with PII masking and AI-generated summaries. Supports English language and complies with GDPR.
 
